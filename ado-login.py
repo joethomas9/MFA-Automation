@@ -10,7 +10,7 @@ PASSWORD = os.getenv("ADO_PASSWORD")
 TOTP_SECRET = os.getenv("ADO_TOTP_SECRET")
 
 def generate_totp(secret):
-    totp= pyotp.TOTP(secret)
+    totp = pyotp.TOTP(secret)
     return totp.now()
 
 def login_ado():
