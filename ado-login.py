@@ -25,9 +25,9 @@ def login_ado():
         page.locator('#i0116').fill(USERNAME)
         page.locator("#idSIButton9").click()
 
-        # Wait to be taken to org sign-in, then enter password
-        # This _might_ be different for your org, if so use the 
-        # ID of the password input field and submit button
+        """ Wait to be taken to org sign-in, then enter password.
+        This _might_ be different for your org, if so use the 
+        ID of the password input field and submit button """
         page.locator("#passwordInput").fill(PASSWORD)
         page.locator("#submitButton").click()
 
@@ -43,10 +43,24 @@ def login_ado():
 
         # Verify stay signed in
         page.locator("#idSIButton9").click()
-
+        
         # You are now logged in
         print("Login successful!", flush=True)
+
+        """ You can save this context so you cna automatically log in
+        To SSO apps without having to complete MFA sign-in each time """
+        context.storage_state(path="state.json")
+        context.close()
+
+def login_ado_with_creds():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+        context = browser.new_context(storage_state="state.json", record_video_dir="./videos/", 
+                                      record_video_size={"width": 1280, "height": 720})
+        page.goto(URL)
+        print("Logged in with stored credentials", flush=True)
         context.close()
 
 login_ado()
+login_ado_with_creds()
 
